@@ -51,32 +51,37 @@ public class Example extends Application {
 		ImageView imageView_front = new ImageView(medical_image_front);
 
 
-		Button mip_button_top = new Button("MIP Top"); //an example button to switch to MIP mode
-		Button mip_button_side = new Button("MIP Side"); //an example button to switch to MIP mode
-		Button mip_button_front = new Button("MIP Front"); //an example button to switch to MIP mode
+		Button mip_button = new Button("MIP"); //an example button to switch to MIP mode
+		Button thumbnail_button = new Button("Thumbnails"); //button for thumbnails
+		Button rotate_view_button = new Button("Rotate"); //button for rotate view
 		//sliders to step through the slices (z and y directions) (remember 113 slices in z direction 0-112)
 		Slider zslider = new Slider(0, 112, 0);
 		Slider yslider = new Slider(0, 255, 0);
 		Slider xslider = new Slider(0, 255, 0);
 	
-		mip_button_top.setOnAction(new EventHandler<ActionEvent>() {
+		mip_button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
 				MIP_Top(medical_image_top);
-            }
-		});
-		
-		mip_button_front.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
 				MIP_Front(medical_image_front);
+				MIP_Side(medical_image_side);
             }
 		});
 		
-		mip_button_side.setOnAction(new EventHandler<ActionEvent>() {
+		thumbnail_button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-				MIP_Side(medical_image_side);
+				System.out.println("Thumbnails");
+				Stage newStage = new Stage();
+				Thumbnail.setData(cthead);
+				Thumbnail.Display(newStage);
+            }
+		});
+		
+		rotate_view_button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+				System.out.println("Rotate");
             }
         });
 		
@@ -115,7 +120,7 @@ public class Example extends Application {
         root.setHgap(4);
 //https://examples.javacodegeeks.com/desktop-java/javafx/scene/image-scene/javafx-image-example/
 
-		root.getChildren().addAll(imageView_top, imageView_front, imageView_side, mip_button_top, mip_button_front, mip_button_side, zslider, yslider, xslider);
+		root.getChildren().addAll(imageView_top, imageView_front, imageView_side, mip_button, thumbnail_button, rotate_view_button, zslider, yslider, xslider);
 
         Scene scene = new Scene(root, 800, 480);
         stage.setScene(scene);
