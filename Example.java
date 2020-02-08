@@ -15,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.*;
 
@@ -73,6 +74,8 @@ public class Example extends Application {
             public void handle(ActionEvent event) {
 				System.out.println("Thumbnails");
 				Stage newStage = new Stage();
+				newStage.initModality(Modality.APPLICATION_MODAL);
+				newStage.initOwner(stage);
 				Thumbnail.setData(cthead);
 				Thumbnail.Display(newStage);
             }

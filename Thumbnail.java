@@ -32,10 +32,12 @@ public class Thumbnail {
     private static WritableImage[] sideView = new WritableImage[256];
     private static WritableImage[] topView = new WritableImage[113];
 
+    private static ImageView[] display = new ImageView[256];
+
     private static ObservableList<String> options = 
         FXCollections.observableArrayList(
-            "Top View",
             "Side View",
+            "Top View",
             "Front View"
         );
     private static final ComboBox choice = new ComboBox(options);
@@ -51,16 +53,16 @@ public class Thumbnail {
         System.out.println(min + " " + max);
         //top view
         for(int i = 0; i < 113; i++) {
-            w = new WritableImage(32,32);
+            w = new WritableImage(64,64);
             pw = w.getPixelWriter();
             float col;
             short datum;
-            for (int y = 0; y < 256; y = y + 8) {
-                for (int x = 0; x < 256; x = x + 8) {
+            for (int y = 0; y < 256; y = y + 4) {
+                for (int x = 0; x < 256; x = x + 4) {
                     datum=cthead[i][x][y];
 				    col=(((float)datum-(float)min)/((float)(max-min)));
                     for (int c = 0; c < 3; c++) {
-                        pw.setColor((x / 8), (y / 8), Color.color(col,col,col, 1.0));
+                        pw.setColor((x / 4), (y / 4), Color.color(col,col,col, 1.0));
                     }
                 } 
             }
@@ -69,16 +71,16 @@ public class Thumbnail {
 
         //side view
         for(int i = 0; i < 256; i++) {
-            w = new WritableImage(32,15);
+            w = new WritableImage(64,30);
             pw = w.getPixelWriter();
             float col;
             short datum;
-            for (int y = 0; y < 113; y = y + 8) {
-                for (int x = 0; x < 256; x = x + 8) {
+            for (int y = 0; y < 113; y = y + 4) {
+                for (int x = 0; x < 256; x = x + 4) {
                     datum=cthead[y][x][i];
 				    col=(((float)datum-(float)min)/((float)(max-min)));
                     for (int c = 0; c < 3; c++) {
-                        pw.setColor((x / 8), (y / 8), Color.color(col,col,col, 1.0));
+                        pw.setColor((x / 4), (y / 4), Color.color(col,col,col, 1.0));
                     }
                 } 
             }
@@ -87,16 +89,16 @@ public class Thumbnail {
 
         //front view
         for(int i = 0; i < 256; i++) {
-            w = new WritableImage(32,15);
+            w = new WritableImage(64,30);
             pw = w.getPixelWriter();
             float col;
             short datum;
-            for (int y = 0; y < 113; y = y + 8) {
-                for (int x = 0; x < 256; x = x + 8) {
+            for (int y = 0; y < 113; y = y + 4) {
+                for (int x = 0; x < 256; x = x + 4) {
                     datum=cthead[y][i][x];
 				    col=(((float)datum-(float)min)/((float)(max-min)));
                     for (int c = 0; c < 3; c++) {
-                        pw.setColor((x / 8), (y / 8), Color.color(col,col,col, 1.0));
+                        pw.setColor((x / 4), (y / 4), Color.color(col,col,col, 1.0));
                     }
                 } 
             }
@@ -107,19 +109,48 @@ public class Thumbnail {
     public static void Display(Stage newStage) {
         newStage.setTitle("Thumbnails");
 
-        // Create action event 
-        EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() { 
-            public void handle(ActionEvent e) { 
-                System.out.println(choice.getValue() + " selected"); 
-            } 
-        };
+        choice.getSelectionModel().selectFirst();
 
         ScrollPane sp = new ScrollPane();
+        sp.setFitToHeight(true);
+        sp.setFitToWidth(true);
         FlowPane root = new FlowPane();
         root.setVgap(8);
         root.setHgap(4);
         root.getChildren().add(choice);
+        for(int i = 0; i < 256; i++) {
+            display[i] = new ImageView(sideView[i]);
+            root.getChildren().add(display[i]);
+        }
         sp.setContent(root);
+
+        // Create action event 
+        EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() { 
+            public void handle(ActionEvent e) { 
+                System.out.println(choice.getValue() + " selected");
+                if(choice.getValue().equals("Top View")) {
+                    for(int i = 0; i < 113; i++) {
+                        display[i].setImage(topView[i]);
+                    }
+                    for(int j = 113; j < 256; j++) {
+                        display[j].setImage(null);
+                    }
+                } else if(choice.getValue().equals("Side View")) {
+                    for(int i = 0; i < 256; i++) {
+                        display[i].setImage(sideView[i]);
+                    }
+                } else if(choice.getValue().equals("Front View")) {
+                    for(int i = 0; i < 256; i++) {
+                        display[i].setImage(frontView[i]);
+                    }
+                }
+                
+            } 
+        }; 
+  
+        // Set on action 
+        choice.setOnAction(event); 
+
         Scene scene = new Scene(sp, 600, 300);
         newStage.setScene(scene);
         newStage.show();
