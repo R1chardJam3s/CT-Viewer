@@ -55,7 +55,7 @@ public class Example extends Application {
 		Button mip_button = new Button("MIP"); //an example button to switch to MIP mode
 		Button thumbnail_button = new Button("Thumbnails"); //button for thumbnails
 		Button resize_button = new Button("Resize"); //button for thumbnails
-		Button rotate_view_button = new Button("Rotate"); //button for rotate view
+		Button histogram_view_button = new Button("Histogram"); //button for histogram view
 		//sliders to step through the slices (z and y directions) (remember 113 slices in z direction 0-112)
 		Slider zslider = new Slider(0, 112, 0);
 		Slider yslider = new Slider(0, 255, 0);
@@ -94,10 +94,16 @@ public class Example extends Application {
             }
         });
 		
-		rotate_view_button.setOnAction(new EventHandler<ActionEvent>() {
+		histogram_view_button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-				System.out.println("Rotate");
+				System.out.println("Histogram");
+				Histogram.create(cthead);
+				Histogram.printT();
+				Stage newStage = new Stage();
+				newStage.initModality(Modality.APPLICATION_MODAL);
+				newStage.initOwner(stage);
+				Histogram.Display(newStage);
             }
         });
 		
@@ -136,7 +142,7 @@ public class Example extends Application {
         root.setHgap(4);
 //https://examples.javacodegeeks.com/desktop-java/javafx/scene/image-scene/javafx-image-example/
 
-		root.getChildren().addAll(imageView_top, imageView_front, imageView_side, mip_button, thumbnail_button, resize_button, rotate_view_button, zslider, yslider, xslider);
+		root.getChildren().addAll(imageView_top, imageView_front, imageView_side, mip_button, thumbnail_button, resize_button, histogram_view_button, zslider, yslider, xslider);
 
         Scene scene = new Scene(root, 800, 480);
         stage.setScene(scene);

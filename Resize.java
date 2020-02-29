@@ -85,14 +85,14 @@ public class Resize {
         //Button to confirm and opens image in new window
         //Second button for second mode
 
-        Slider size_slider = new Slider(1, 765, 255);
+        Slider size_slider = new Slider(1, 768, 256);
         Button confirm_button = new Button("Confirm");
 
         confirm_button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 Stage newStage = new Stage();
-                double ratio = size_slider.getValue() / 255;
+                double ratio = size_slider.getValue() / 256;
                 WritableImage newImageNN = new WritableImage((int) size_slider.getValue(), (int) Math.floor((baseImage.getHeight() - 1) * ratio));
                 WritableImage newImageBI = new WritableImage((int) size_slider.getValue(), (int) Math.floor((baseImage.getHeight() - 1) * ratio));
                 System.out.println("Width,Height = " + newImageBI.getWidth() + "," + newImageBI.getHeight());
@@ -154,9 +154,9 @@ public class Resize {
         FlowPane root = new FlowPane();
         root.setVgap(8);
         root.setHgap(4);
-        root.getChildren().addAll(imageview, imageview2);
+        root.getChildren().addAll(imageview2);
 
-        Scene scene = new Scene(root, (imageNN.getWidth() * 2) + 20, imageNN.getHeight() + 10);
+        Scene scene = new Scene(root, imageNN.getWidth() + 20, imageNN.getHeight() + 10);
         stage.setScene(scene);
         stage.show();
     }
